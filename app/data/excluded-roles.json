@@ -1,0 +1,12 @@
+{
+  "excluded_roles": [
+    "journalist", "reporter", "correspondent", "editor-in-chief",
+    "professor", "researcher", "academic", "photographer",
+    "politician", "senator", "governor", "mayor"
+  ],
+  "excluded_roles_pt": [],
+  "excluded_roles_es": [],
+  "excluded_roles_fr": [],
+  "excluded_roles_de": [],
+  "excluded_roles_it": []
+}

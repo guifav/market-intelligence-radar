@@ -1,0 +1,14 @@
+{
+  "name_keywords": [
+    "unnamed",
+    "unknown",
+    "anonymous"
+  ],
+  "title_keywords": [
+    "intern",
+    "student",
+    "volunteer"
+  ],
+  "company_keywords": [],
+  "_comment": "Keywords that trigger automatic exclusion of extracted entities"
+}

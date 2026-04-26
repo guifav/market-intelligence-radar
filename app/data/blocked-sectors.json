@@ -1,0 +1,4 @@
+{
+  "blocked_sectors": [],
+  "_comment": "Sectors to completely exclude from extraction. Add sector names from taxonomy.json."
+}

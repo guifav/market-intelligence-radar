@@ -1,0 +1,164 @@
+{
+  "version": "1.0",
+  "description": "Customizable taxonomy for Market Intelligence Radar. Edit to match your industry.",
+  "segments": [
+    "Technology",
+    "Finance",
+    "Healthcare",
+    "Energy"
+  ],
+  "sectors": {
+    "technology": [
+      "Artificial Intelligence",
+      "Cloud Computing",
+      "Cybersecurity",
+      "FinTech",
+      "SaaS",
+      "Enterprise Software",
+      "Semiconductors",
+      "Robotics",
+      "Digital Infrastructure"
+    ],
+    "finance": [
+      "Capital Markets",
+      "Private Equity",
+      "Venture Capital",
+      "Investment Banking",
+      "Asset Management",
+      "Insurance",
+      "Wealth Management",
+      "Digital Assets"
+    ],
+    "healthcare": [
+      "Pharmaceuticals",
+      "Biotechnology",
+      "Medical Devices",
+      "Digital Health",
+      "Health Services",
+      "Life Sciences"
+    ],
+    "energy": [
+      "Renewable Energy",
+      "Oil and Gas",
+      "Energy Storage",
+      "Power Generation",
+      "Energy Distribution",
+      "Carbon Markets",
+      "Utilities"
+    ],
+    "thematic": [
+      "ESG and Sustainability",
+      "Macroeconomic Trends",
+      "Regulation",
+      "Demographics",
+      "Leadership",
+      "Digital Transformation"
+    ]
+  },
+  "categories": [
+    "Corporation",
+    "Startup",
+    "Investment Fund",
+    "Institutional Investor",
+    "Bank/Lender",
+    "Venture Capital",
+    "Private Equity",
+    "Family Office",
+    "Consulting Firm",
+    "Technology Company",
+    "Service Provider",
+    "Government",
+    "Academic",
+    "Non-profit",
+    "Operator"
+  ],
+  "investment_strategies": [
+    "Growth",
+    "Value",
+    "Income",
+    "Opportunistic",
+    "Venture",
+    "Buyout",
+    "Distressed",
+    "Diversified",
+    "Not Applicable"
+  ],
+  "deal_sizes": [
+    "< $10M",
+    "$10M - $50M",
+    "$50M - $100M",
+    "$100M - $500M",
+    "$500M - $1B",
+    "> $1B",
+    "Not Disclosed"
+  ],
+  "portfolio_strategies": [
+    "Buy",
+    "Sell",
+    "Hold",
+    "Expand",
+    "Divest",
+    "Not Applicable"
+  ],
+  "regions": [
+    "North America",
+    "Latin America",
+    "Europe",
+    "Middle East",
+    "Africa",
+    "Asia Pacific"
+  ],
+  "geo_regions": {
+    "North America": [
+      "United States",
+      "Canada"
+    ],
+    "Latin America": [
+      "Brazil",
+      "Mexico",
+      "Colombia",
+      "Chile",
+      "Argentina",
+      "Peru"
+    ],
+    "Europe": [
+      "United Kingdom",
+      "Germany",
+      "France",
+      "Spain",
+      "Netherlands",
+      "Italy",
+      "Poland",
+      "Sweden",
+      "Switzerland"
+    ],
+    "Middle East": [
+      "United Arab Emirates",
+      "Saudi Arabia",
+      "Qatar"
+    ],
+    "Asia Pacific": [
+      "China",
+      "Japan",
+      "Australia",
+      "India",
+      "Singapore",
+      "South Korea"
+    ],
+    "Africa": [
+      "South Africa",
+      "Nigeria",
+      "Kenya",
+      "Egypt"
+    ]
+  },
+  "normalisation": {
+    "country_aliases": {
+      "US": "United States",
+      "USA": "United States",
+      "UK": "United Kingdom",
+      "UAE": "United Arab Emirates",
+      "KSA": "Saudi Arabia"
+    }
+  }
+}

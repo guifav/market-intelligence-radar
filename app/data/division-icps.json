@@ -1,0 +1,158 @@
+{
+  "technology": {
+    "label": "Technology",
+    "segment": "technology",
+    "region": "global",
+    "target_roles": [
+      "CEO",
+      "CTO",
+      "VP Engineering",
+      "VP Product",
+      "COO"
+    ],
+    "target_categories": [
+      "Technology Company",
+      "Startup",
+      "Venture Capital"
+    ],
+    "conditional_categories": [
+      "Consulting Firm"
+    ],
+    "excluded_categories": [
+      "Government",
+      "Academic"
+    ],
+    "target_sectors": [
+      "Artificial Intelligence",
+      "Cloud Computing",
+      "SaaS",
+      "Cybersecurity"
+    ],
+    "target_countries": [],
+    "languages": [
+      "en"
+    ],
+    "notes": "Technology sector leads",
+    "excluded_titles": [],
+    "excluded_companies": [],
+    "excluded_sectors": [],
+    "excluded_countries": []
+  },
+  "finance": {
+    "label": "Finance",
+    "segment": "finance",
+    "region": "global",
+    "target_roles": [
+      "CEO",
+      "CFO",
+      "CIO",
+      "Managing Director",
+      "Partner"
+    ],
+    "target_categories": [
+      "Investment Fund",
+      "Institutional Investor",
+      "Bank/Lender",
+      "Private Equity"
+    ],
+    "conditional_categories": [
+      "Consulting Firm"
+    ],
+    "excluded_categories": [
+      "Government",
+      "Academic"
+    ],
+    "target_sectors": [
+      "Capital Markets",
+      "Private Equity",
+      "Venture Capital",
+      "Asset Management"
+    ],
+    "target_countries": [],
+    "languages": [
+      "en"
+    ],
+    "notes": "Finance and investment leads",
+    "excluded_titles": [],
+    "excluded_companies": [],
+    "excluded_sectors": [],
+    "excluded_countries": []
+  },
+  "healthcare": {
+    "label": "Healthcare",
+    "segment": "healthcare",
+    "region": "global",
+    "target_roles": [
+      "CEO",
+      "CMO",
+      "VP R&D",
+      "CSO",
+      "Head of Operations"
+    ],
+    "target_categories": [
+      "Corporation",
+      "Startup",
+      "Investment Fund"
+    ],
+    "conditional_categories": [
+      "Consulting Firm"
+    ],
+    "excluded_categories": [
+      "Government"
+    ],
+    "target_sectors": [
+      "Pharmaceuticals",
+      "Biotechnology",
+      "Digital Health",
+      "Medical Devices"
+    ],
+    "target_countries": [],
+    "languages": [
+      "en"
+    ],
+    "notes": "Healthcare and life sciences leads",
+    "excluded_titles": [],
+    "excluded_companies": [],
+    "excluded_sectors": [],
+    "excluded_countries": []
+  },
+  "energy": {
+    "label": "Energy",
+    "segment": "energy",
+    "region": "global",
+    "target_roles": [
+      "CEO",
+      "COO",
+      "VP Operations",
+      "Director of Energy"
+    ],
+    "target_categories": [
+      "Corporation",
+      "Investment Fund",
+      "Operator"
+    ],
+    "conditional_categories": [
+      "Consulting Firm",
+      "Service Provider"
+    ],
+    "excluded_categories": [
+      "Government",
+      "Academic"
+    ],
+    "target_sectors": [
+      "Renewable Energy",
+      "Oil and Gas",
+      "Energy Storage",
+      "Carbon Markets"
+    ],
+    "target_countries": [],
+    "languages": [
+      "en"
+    ],
+    "notes": "Energy sector leads",
+    "excluded_titles": [],
+    "excluded_companies": [],
+    "excluded_sectors": [],
+    "excluded_countries": []
+  }
+}

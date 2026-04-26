@@ -1,0 +1,30 @@
+.env
+__pycache__/
+*.pyc
+venv/
+.venv/
+*.egg-info/
+dist/
+build/
+app/node_modules/
+app/.next/
+/data
+.claude/
+tsconfig.tsbuildinfo
+app/tsconfig.tsbuildinfo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Next.js generated
+app/next-env.d.ts

@@ -1,0 +1,10 @@
+# Core dependencies
+psycopg2-binary>=2.9
+requests>=2.31
+python-dotenv>=1.0
+beautifulsoup4>=4.12
+html2text>=2024.2
+
+# Note: LLM providers (Anthropic/OpenAI/Gemini) are called via REST API
+# using the `requests` library. No provider-specific SDK is needed.
+# Firecrawl is also called via REST API — no SDK required.
