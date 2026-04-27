@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Compile check
+        run: python3 -m compileall -q mir
+      - name: Smoke import all modules
+        run: |
+          python3 -c "
+          import mir.scanner
+          import mir.enricher
+          import mir.classifier
+          import mir.icp_policy
+          import mir.matcher
+          import mir.crm_import
+          import mir.llm
+          import mir.pg_storage
+          import mir.db
+          import mir.icps
+          import mir.exclusions
+          import mir.scraper
+          import mir.extractor
+          import mir.sources
+          import mir.rate_limit
+          import mir.data_paths
+          print('All module imports OK')
+          "
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: cd app && npm ci
+      - run: cd app && npm run build

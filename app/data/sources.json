@@ -1,0 +1,50 @@
+[
+  {
+    "name": "TechCrunch",
+    "url": "https://techcrunch.com",
+    "region_hint": "technology",
+    "enabled": true
+  },
+  {
+    "name": "Ars Technica",
+    "url": "https://arstechnica.com",
+    "region_hint": "technology",
+    "enabled": true
+  },
+  {
+    "name": "Reuters Business",
+    "url": "https://www.reuters.com/business",
+    "region_hint": "finance",
+    "enabled": true
+  },
+  {
+    "name": "Financial Times",
+    "url": "https://www.ft.com",
+    "region_hint": "finance",
+    "enabled": true
+  },
+  {
+    "name": "STAT News",
+    "url": "https://www.statnews.com",
+    "region_hint": "healthcare",
+    "enabled": true
+  },
+  {
+    "name": "Utility Dive",
+    "url": "https://www.utilitydive.com",
+    "region_hint": "energy",
+    "enabled": true
+  },
+  {
+    "name": "VentureBeat",
+    "url": "https://venturebeat.com",
+    "region_hint": "technology",
+    "enabled": true
+  },
+  {
+    "name": "Fierce Healthcare",
+    "url": "https://www.fiercehealthcare.com",
+    "region_hint": "healthcare",
+    "enabled": true
+  }
+]

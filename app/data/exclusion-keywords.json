@@ -1,0 +1,22 @@
+{
+  "name_keywords": [
+    "unnamed",
+    "unknown",
+    "anonymous",
+    "staff reporter",
+    "press office"
+  ],
+  "title_keywords": [
+    "intern",
+    "student",
+    "volunteer",
+    "freelance journalist",
+    "photographer"
+  ],
+  "company_keywords": [
+    "reuters",
+    "bloomberg",
+    "associated press"
+  ],
+  "_comment": "Keywords that trigger automatic exclusion. Matched case-insensitively against extracted entity fields."
+}

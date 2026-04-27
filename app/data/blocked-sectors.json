@@ -1,0 +1,8 @@
+{
+  "blocked_sectors": [
+    "Mining",
+    "Tobacco",
+    "Gambling"
+  ],
+  "_comment": "Sectors to completely exclude from intelligence extraction. Values must match sector names in taxonomy.json. Set to [] to allow all."
+}

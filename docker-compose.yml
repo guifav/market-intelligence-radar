@@ -1,0 +1,41 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: mir
+      POSTGRES_USER: mir
+      POSTGRES_PASSWORD: mir
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mir"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://mir:mir@db:5432/mir
+      NODE_ENV: development
+      LLM_PROVIDER: ${LLM_PROVIDER:-anthropic}
+      LLM_API_KEY: ${LLM_API_KEY}
+      # Auth: set these in .env for production deployments.
+      # Default credentials only work when NODE_ENV != production.
+      AUTH_EMAIL: ${AUTH_EMAIL:-admin@example.com}
+      AUTH_PASSWORD: ${AUTH_PASSWORD:-changeme}
+      AUTH_SECRET: ${AUTH_SECRET:-mir-local-dev-secret}
+      FIRECRAWL_API_KEY: ${FIRECRAWL_API_KEY:-}
+      APOLLO_API_KEY: ${APOLLO_API_KEY:-}
+      SALESQL_API_KEY: ${SALESQL_API_KEY:-}
+    ports:
+      - "3000:3000"
+
+volumes:
+  pgdata:

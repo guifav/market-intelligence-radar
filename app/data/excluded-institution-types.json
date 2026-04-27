@@ -1,0 +1,9 @@
+{
+  "excluded_types": [
+    "Government Agency",
+    "Military Organization",
+    "Political Party",
+    "Religious Institution"
+  ],
+  "_comment": "Organization types to automatically exclude from lead extraction."
+}

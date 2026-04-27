@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "market-intelligence-radar"
+version = "1.0.0"
+description = "AI-powered market intelligence platform"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+authors = [{name = "Guilherme Favaron"}]
+dependencies = [
+    "psycopg2-binary>=2.9",
+    "requests>=2.31",
+    "python-dotenv>=1.0",
+    "beautifulsoup4>=4.12",
+    "html2text>=2024.2",
+]
+
+[project.scripts]
+mir-scanner = "mir.scanner:main"
+
+[project.urls]
+Repository = "https://github.com/guifav/market-intelligence-radar"
+
+[tool.setuptools.packages.find]
+include = ["mir*"]

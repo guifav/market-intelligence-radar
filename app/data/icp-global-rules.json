@@ -1,0 +1,5 @@
+{
+  "blocked_categories": ["Government", "Academic"],
+  "conditional_categories": ["Consultant"],
+  "notes": "Customize these rules for your industry"
+}
