@@ -6,6 +6,8 @@ An AI-powered market intelligence platform that automatically scans news sources
 
 ## What It Does
 
+![What it does — 7 steps from scan to dashboard](docs/what-it-does.svg)
+
 1. **Scans** configurable news sources for new articles
 2. **Scrapes** article content (Firecrawl or requests+BeautifulSoup fallback)
 3. **Extracts** structured intelligence using LLMs (Claude, GPT-4o, or Gemini)
@@ -52,19 +54,7 @@ open http://localhost:3000
 
 ## Architecture
 
-```
-┌─────────────┐     ┌──────────┐     ┌──────────┐     ┌────────────┐
-│ News Sources │────▶│ Scraper  │────▶│ LLM      │────▶│ PostgreSQL │
-│ (JSON config)│     │ Firecrawl│     │ Extractor│     │ Storage    │
-└─────────────┘     │ +BS4     │     └──────────┘     └─────┬──────┘
-                    └──────────┘                            │
-                                                            ▼
-┌─────────────┐     ┌──────────┐     ┌──────────┐     ┌────────────┐
-│ CRM Contacts│────▶│ Matcher  │     │ Apollo   │     │ Next.js    │
-│ (CSV import)│     │ 4-tier   │     │ SalesQL  │     │ Dashboard  │
-└─────────────┘     └──────────┘     │ (optional)│    └────────────┘
-                                     └──────────┘
-```
+![System architecture](docs/architecture.svg)
 
 ### Python Pipeline (`mir/`)
 - `scanner.py` — Main orchestrator
