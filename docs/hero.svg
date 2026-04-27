@@ -1,0 +1,174 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" role="img" aria-label="Market Intelligence Radar — AI-powered news scanning, entity extraction, and CRM matching">
+  <defs>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap');</style>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#070b18"/>
+      <stop offset="55%" stop-color="#0b1224"/>
+      <stop offset="100%" stop-color="#10182e"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.35"/>
+      <stop offset="55%" stop-color="#38bdf8" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="sweep" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.55"/>
+      <stop offset="60%" stop-color="#38bdf8" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="title" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#e2e8f0"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </linearGradient>
+    <pattern id="dots" x="0" y="0" width="22" height="22" patternUnits="userSpaceOnUse">
+      <circle cx="1.5" cy="1.5" r="1" fill="#1a2440"/>
+    </pattern>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.4"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="420" fill="url(#bg)"/>
+  <rect width="1200" height="420" fill="url(#dots)"/>
+
+  <!-- subtle horizon glow on the left third -->
+  <ellipse cx="240" cy="210" rx="320" ry="200" fill="url(#glow)"/>
+
+  <!-- ── RADAR (left) ─────────────────────────────────────────────────── -->
+  <g transform="translate(240, 210)">
+    <!-- concentric rings -->
+    <circle r="180" fill="none" stroke="#1e3a5f" stroke-width="1"/>
+    <circle r="140" fill="none" stroke="#1e3a5f" stroke-width="1"/>
+    <circle r="100" fill="none" stroke="#1e3a5f" stroke-width="1"/>
+    <circle r="60"  fill="none" stroke="#1e3a5f" stroke-width="1"/>
+    <circle r="20"  fill="none" stroke="#38bdf8" stroke-opacity="0.6"/>
+
+    <!-- crosshairs -->
+    <line x1="-180" y1="0" x2="180" y2="0" stroke="#1e3a5f" stroke-width="1"/>
+    <line x1="0" y1="-180" x2="0" y2="180" stroke="#1e3a5f" stroke-width="1"/>
+
+    <!-- sweep wedge -->
+    <path d="M 0 0 L 178 -20 A 180 180 0 0 1 90 156 Z" fill="url(#sweep)"/>
+
+    <!-- leading edge of the sweep -->
+    <line x1="0" y1="0" x2="178" y2="-20" stroke="#7dd3fc" stroke-width="1.5" stroke-opacity="0.9"/>
+
+    <!-- detected entities (radar blips) -->
+    <g>
+      <circle cx="-110" cy="-60" r="14" fill="none" stroke="#38bdf8" stroke-opacity="0.25"/>
+      <circle cx="-110" cy="-60" r="3" fill="#38bdf8"/>
+    </g>
+    <g>
+      <circle cx="60"  cy="-130" r="14" fill="none" stroke="#a78bfa" stroke-opacity="0.25"/>
+      <circle cx="60"  cy="-130" r="3" fill="#a78bfa"/>
+    </g>
+    <g>
+      <circle cx="120" cy="60"  r="14" fill="none" stroke="#22d3ee" stroke-opacity="0.25"/>
+      <circle cx="120" cy="60"  r="3" fill="#22d3ee"/>
+    </g>
+    <g>
+      <circle cx="-70" cy="120" r="14" fill="none" stroke="#fbbf24" stroke-opacity="0.25"/>
+      <circle cx="-70" cy="120" r="3" fill="#fbbf24"/>
+    </g>
+    <g>
+      <circle cx="40"  cy="80"  r="3" fill="#94a3b8"/>
+    </g>
+    <g>
+      <circle cx="-150" cy="40"  r="3" fill="#94a3b8"/>
+    </g>
+
+    <!-- center node -->
+    <circle r="6" fill="#38bdf8"/>
+    <circle r="6" fill="#38bdf8" filter="url(#soft)" opacity="0.7"/>
+  </g>
+
+  <!-- ── CENTER: title + tagline + stack ──────────────────────────────── -->
+  <g transform="translate(500, 145)">
+    <text x="0" y="0" fill="url(#title)" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="36" font-weight="700" letter-spacing="-0.5">Market Intelligence</text>
+    <text x="0" y="40" fill="url(#title)" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="36" font-weight="700" letter-spacing="-0.5">Radar</text>
+
+    <text x="0" y="76" fill="#64748b" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="400">AI-powered news scanning, entity extraction</text>
+    <text x="0" y="94" fill="#64748b" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="400">and CRM matching, end to end.</text>
+
+    <!-- stack pills -->
+    <g transform="translate(0, 120)">
+      <g>
+        <rect x="0" y="0" width="86" height="24" rx="12" fill="#0f172a" stroke="#1e293b"/>
+        <text x="43" y="16" fill="#94a3b8" font-family="Inter, ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="11" font-weight="500" text-anchor="middle">PostgreSQL</text>
+      </g>
+      <g transform="translate(94, 0)">
+        <rect x="0" y="0" width="64" height="24" rx="12" fill="#0f172a" stroke="#1e293b"/>
+        <text x="32" y="16" fill="#94a3b8" font-family="Inter, ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="11" font-weight="500" text-anchor="middle">Next.js</text>
+      </g>
+      <g transform="translate(166, 0)">
+        <rect x="0" y="0" width="64" height="24" rx="12" fill="#0f172a" stroke="#1e293b"/>
+        <text x="32" y="16" fill="#94a3b8" font-family="Inter, ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="11" font-weight="500" text-anchor="middle">Python</text>
+      </g>
+      <g transform="translate(238, 0)">
+        <rect x="0" y="0" width="86" height="24" rx="12" fill="#0f172a" stroke="#1e293b"/>
+        <text x="43" y="16" fill="#94a3b8" font-family="Inter, ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="11" font-weight="500" text-anchor="middle">Claude / GPT</text>
+      </g>
+      <g transform="translate(332, 0)">
+        <rect x="0" y="0" width="60" height="24" rx="12" fill="#0f172a" stroke="#1e293b"/>
+        <text x="30" y="16" fill="#94a3b8" font-family="Inter, ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="11" font-weight="500" text-anchor="middle">Apollo</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ── RIGHT: extracted entity cards ────────────────────────────────── -->
+  <g transform="translate(900, 80)">
+    <!-- People -->
+    <g>
+      <rect x="0" y="0" width="240" height="60" rx="10" fill="#0f172a" stroke="#1e293b"/>
+      <circle cx="30" cy="30" r="14" fill="#38bdf8" fill-opacity="0.15" stroke="#38bdf8" stroke-opacity="0.7"/>
+      <circle cx="30" cy="26" r="4" fill="#38bdf8"/>
+      <path d="M 22 38 Q 30 32 38 38" fill="none" stroke="#38bdf8" stroke-width="1.6" stroke-linecap="round"/>
+      <text x="56" y="26" fill="#e2e8f0" font-family="Inter, ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="13" font-weight="600">People</text>
+      <text x="56" y="44" fill="#64748b" font-family="Inter, ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="11">Decision-makers, with email and LinkedIn</text>
+    </g>
+
+    <!-- Companies -->
+    <g transform="translate(0, 75)">
+      <rect x="0" y="0" width="240" height="60" rx="10" fill="#0f172a" stroke="#1e293b"/>
+      <circle cx="30" cy="30" r="14" fill="#a78bfa" fill-opacity="0.15" stroke="#a78bfa" stroke-opacity="0.7"/>
+      <rect x="24" y="24" width="12" height="12" fill="none" stroke="#a78bfa" stroke-width="1.6" rx="1"/>
+      <line x1="28" y1="28" x2="32" y2="28" stroke="#a78bfa" stroke-width="1.4"/>
+      <line x1="28" y1="32" x2="32" y2="32" stroke="#a78bfa" stroke-width="1.4"/>
+      <text x="56" y="26" fill="#e2e8f0" font-family="Inter, ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="13" font-weight="600">Companies</text>
+      <text x="56" y="44" fill="#64748b" font-family="Inter, ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="11">Sectors, categories, deal involvement</text>
+    </g>
+
+    <!-- Deals -->
+    <g transform="translate(0, 150)">
+      <rect x="0" y="0" width="240" height="60" rx="10" fill="#0f172a" stroke="#1e293b"/>
+      <circle cx="30" cy="30" r="14" fill="#22d3ee" fill-opacity="0.15" stroke="#22d3ee" stroke-opacity="0.7"/>
+      <path d="M 22 30 L 30 24 L 38 30 L 30 36 Z" fill="none" stroke="#22d3ee" stroke-width="1.6" stroke-linejoin="round"/>
+      <text x="56" y="26" fill="#e2e8f0" font-family="Inter, ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="13" font-weight="600">Deals</text>
+      <text x="56" y="44" fill="#64748b" font-family="Inter, ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="11">M&amp;A, fundraisings, IPOs, JVs</text>
+    </g>
+
+    <!-- Signals -->
+    <g transform="translate(0, 225)">
+      <rect x="0" y="0" width="240" height="60" rx="10" fill="#0f172a" stroke="#1e293b"/>
+      <circle cx="30" cy="30" r="14" fill="#fbbf24" fill-opacity="0.15" stroke="#fbbf24" stroke-opacity="0.7"/>
+      <path d="M 22 36 L 26 30 L 30 33 L 34 24 L 38 28" fill="none" stroke="#fbbf24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="56" y="26" fill="#e2e8f0" font-family="Inter, ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="13" font-weight="600">Signals</text>
+      <text x="56" y="44" fill="#64748b" font-family="Inter, ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="11">Regulatory shifts, market moves, risk</text>
+    </g>
+  </g>
+
+  <!-- ── Connection lines: radar to cards ─────────────────────────────── -->
+  <g stroke-dasharray="2 4" stroke-opacity="0.35" fill="none">
+    <path d="M 360 150 Q 600 130 900 110" stroke="#38bdf8"/>
+    <path d="M 380 200 Q 620 200 900 185" stroke="#a78bfa"/>
+    <path d="M 380 220 Q 620 240 900 260" stroke="#22d3ee"/>
+    <path d="M 360 270 Q 600 300 900 335" stroke="#fbbf24"/>
+  </g>
+
+  <!-- top-right meta tag -->
+  <g transform="translate(1052, 28)">
+    <rect x="0" y="0" width="120" height="22" rx="11" fill="#0f172a" stroke="#1e293b"/>
+    <circle cx="14" cy="11" r="3" fill="#22c55e"/>
+    <text x="26" y="15" fill="#94a3b8" font-family="Inter, ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="10" font-weight="500">open source · MIT</text>
+  </g>
+</svg>

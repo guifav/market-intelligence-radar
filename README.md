@@ -1,8 +1,8 @@
 # Market Intelligence Radar (MIR)
 
-An AI-powered market intelligence platform that automatically scans news sources, extracts structured intelligence (people, companies, deals, signals), and presents it in a real-time dashboard.
+![Market Intelligence Radar — AI-powered news scanning, entity extraction, and CRM matching](docs/hero.svg)
 
-<!-- Screenshot: add a screenshot of the dashboard here -->
+An AI-powered market intelligence platform that automatically scans news sources, extracts structured intelligence (people, companies, deals, signals), and presents it in a real-time dashboard.
 
 ## What It Does
 
