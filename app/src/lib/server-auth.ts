@@ -1,23 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 import * as jose from "jose";
 
-const AUTH_SECRET = process.env.AUTH_SECRET || "mir-default-secret-change-me";
+const DEFAULT_SECRET = "mir-default-secret-change-me";
+const AUTH_SECRET = process.env.AUTH_SECRET || DEFAULT_SECRET;
+const IS_PRODUCTION = process.env.NODE_ENV === "production";
+const IS_BUILD = process.env.NEXT_PHASE === "phase-production-build";
+const HAS_INSECURE_SECRET =
+  !process.env.AUTH_SECRET ||
+  AUTH_SECRET === DEFAULT_SECRET ||
+  AUTH_SECRET === "mir-local-dev-secret" ||
+  AUTH_SECRET === "mir-docker-secret";
+
 const secret = new TextEncoder().encode(AUTH_SECRET);
 
-// Warn about default AUTH_SECRET at runtime (not during build/prerender)
-if (typeof globalThis.addEventListener === "undefined") {
-  // Server-side: check once when the module loads at runtime
-  const isBuild = process.env.NEXT_PHASE === "phase-production-build";
-  if (
-    !isBuild &&
-    process.env.NODE_ENV === "production" &&
-    (!AUTH_SECRET || AUTH_SECRET === "mir-default-secret-change-me")
-  ) {
-    console.warn(
-      "\x1b[33mWARN: AUTH_SECRET is using the default value in production. " +
-      "Set a strong, unique AUTH_SECRET in your environment variables.\x1b[0m"
-    );
-  }
+// In production with default/insecure secret: fail hard at startup
+if (!IS_BUILD && IS_PRODUCTION && HAS_INSECURE_SECRET) {
+  console.error(
+    "\x1b[31mFATAL: AUTH_SECRET is not configured for production. " +
+    "Set a strong, unique AUTH_SECRET environment variable. " +
+    "The server will reject all authentication requests until this is fixed.\x1b[0m"
+  );
 }
 
 export class AuthError extends Error {
@@ -33,6 +35,9 @@ export interface MirUser {
 }
 
 export async function generateToken(email: string): Promise<string> {
+  if (IS_PRODUCTION && HAS_INSECURE_SECRET) {
+    throw new AuthError(503, "Server misconfigured: AUTH_SECRET not set for production");
+  }
   return await new jose.SignJWT({ email })
     .setProtectedHeader({ alg: "HS256" })
     .setExpirationTime("7d")
@@ -40,6 +45,9 @@ export async function generateToken(email: string): Promise<string> {
 }
 
 export async function requireUser(req: NextRequest): Promise<MirUser> {
+  if (IS_PRODUCTION && HAS_INSECURE_SECRET) {
+    throw new AuthError(503, "Server misconfigured: AUTH_SECRET not set for production");
+  }
   const authHeader = req.headers.get("authorization");
   if (!authHeader?.startsWith("Bearer ")) {
     throw new AuthError(401, "Missing or invalid authorization header");

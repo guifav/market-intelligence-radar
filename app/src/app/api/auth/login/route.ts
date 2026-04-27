@@ -9,16 +9,18 @@ export async function POST(req: NextRequest) {
     const authEmail = process.env.AUTH_EMAIL || DEFAULT_EMAIL;
     const authPassword = process.env.AUTH_PASSWORD || DEFAULT_PASSWORD;
 
-    // Block default credentials in production
-    if (
-      process.env.NODE_ENV === "production" &&
-      authEmail === DEFAULT_EMAIL &&
-      authPassword === DEFAULT_PASSWORD
-    ) {
+    // Block ANY default credential in production
+    const hasDefaultEmail = authEmail === DEFAULT_EMAIL;
+    const hasDefaultPassword = authPassword === DEFAULT_PASSWORD;
+
+    if (process.env.NODE_ENV === "production" && (hasDefaultEmail || hasDefaultPassword)) {
+      const missing = [
+        hasDefaultEmail && "AUTH_EMAIL",
+        hasDefaultPassword && "AUTH_PASSWORD",
+      ].filter(Boolean).join(" and ");
       return NextResponse.json(
         {
-          error:
-            "Default credentials are disabled in production. Set AUTH_EMAIL and AUTH_PASSWORD environment variables.",
+          error: `Default credentials are disabled in production. Set ${missing} environment variable(s).`,
         },
         { status: 503 }
       );
