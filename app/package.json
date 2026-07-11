@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "tsx --test src/lib/auth-config.test.ts src/app/api/auth/login/route.test.ts"
   },
   "dependencies": {
     "jose": "^5.2.0",
@@ -23,6 +24,7 @@
     "@types/react-dom": "^19.0.0",
     "postcss": "^8.4.0",
     "tailwindcss": "^4.0.0",
+    "tsx": "^4.23.0",
     "typescript": "^5.7.0"
   },
   "overrides": {

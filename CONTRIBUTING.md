@@ -20,10 +20,14 @@ cd market-intelligence-radar
 
 # Copy and configure environment
 cp .env.example .env
-# Edit .env — at minimum set LLM_API_KEY
+# Edit .env — set LLM_API_KEY, POSTGRES_PASSWORD, AUTH_EMAIL, AUTH_PASSWORD, and AUTH_SECRET
+# POSTGRES_PASSWORD=$(openssl rand -hex 24)
+# AUTH_SECRET=$(openssl rand -hex 32)
 
 # Option A: Docker Compose (recommended)
 docker compose up -d
+
+# Login with AUTH_EMAIL / AUTH_PASSWORD from .env
 
 # Option B: Manual setup
 # Backend
@@ -36,6 +40,19 @@ npm install
 npm run dev
 ```
 
+Docker Compose requires all four security values before it starts: `POSTGRES_PASSWORD`,
+`AUTH_EMAIL`, `AUTH_PASSWORD`, and `AUTH_SECRET`. PostgreSQL is internal to the Compose
+network and is not published to the host. The application binds to `127.0.0.1` by default;
+set `MIR_BIND_ADDRESS=0.0.0.0` only when the application is intentionally exposed behind a
+TLS-terminating reverse proxy.
+
+## Upgrading Existing Docker Compose Data
+
+The [README upgrade guide](README.md#upgrading-existing-docker-compose-data) is the canonical
+data-preserving procedure for existing Docker Compose volumes. Do not delete the `pgdata` volume
+or run `docker compose down -v` during the upgrade; either action deletes the existing database
+data.
+
 ## Running Tests
 
 ```bash
@@ -44,6 +61,7 @@ python3 -m compileall -q mir
 
 # TypeScript — type check + build
 cd app
+npm test
 npm run build
 ```
 
