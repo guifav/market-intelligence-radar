@@ -206,7 +206,7 @@ npm run dev
 ## Tech Stack
 
 - **Backend:** Python 3.12, psycopg2, requests
-- **Frontend:** Next.js 15, React 19, Tailwind CSS 4, shadcn/ui
+- **Frontend:** Next.js 16, React 19, Tailwind CSS 4, shadcn/ui
 - **Database:** PostgreSQL 16
 - **LLM:** Anthropic Claude / OpenAI GPT-4o / Google Gemini
 - **Scraping:** Firecrawl (premium) + requests+BeautifulSoup (fallback)

@@ -47,6 +47,8 @@ jobs:
         with:
           node-version: "22"
       - run: cd app && npm ci
+      - name: Audit production dependencies
+        run: cd app && npm audit --omit=dev --audit-level=high
       - name: Run authentication tests
         run: cd app && npm test
       - name: Validate Compose security
