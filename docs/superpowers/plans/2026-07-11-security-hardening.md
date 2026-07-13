@@ -1,6 +1,6 @@
 # Market Intelligence Radar Security Hardening Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox syntax for tracking; completed steps are marked `[x]`.
 
 **Goal:** Close issues #1 and #2 by making the documented self-hosted path fail closed and updating Next.js with an enforceable dependency audit gate.
 
@@ -45,7 +45,7 @@
 - Produces: `npm test`, which runs auth configuration and login route regression tests.
 - Produces: `node scripts/validate-compose-security.mjs`, which proves both negative and positive Compose resolution.
 
-- [ ] **Step 1: Install the TypeScript test runner and define the test command**
+- [x] **Step 1: Install the TypeScript test runner and define the test command**
 
 Run:
 
@@ -57,7 +57,7 @@ npm pkg set 'scripts.test=tsx --test src/lib/auth-config.test.ts src/app/api/aut
 
 Expected: `package.json` contains the exact `test` script and `tsx` dev dependency; the lockfile is updated.
 
-- [ ] **Step 2: Write failing authentication configuration tests**
+- [x] **Step 2: Write failing authentication configuration tests**
 
 Create tests with Node's `node:test` and `node:assert/strict`. Cover these exact cases:
 
@@ -79,7 +79,7 @@ test("accepts explicit strong authentication config", () => {
 
 Also assert `AuthConfigurationError` for missing fields, `admin@example.com`, `changeme`, passwords shorter than 12, each legacy secret (`mir-default-secret-change-me`, `mir-local-dev-secret`, `mir-docker-secret`, `change-this-to-a-random-string`), secrets shorter than 32, and a 32-character repeated string. Pass `NODE_ENV: "development"` in at least one rejected case.
 
-- [ ] **Step 3: Write failing login route regression tests**
+- [x] **Step 3: Write failing login route regression tests**
 
 Use `NextRequest` and `POST` directly. Restore `process.env` after each test. Assert:
 
@@ -98,13 +98,13 @@ test("returns 503 for repository defaults even in development", async () => {
 
 Add a valid configuration case that returns 200 with `email` and a non-empty JWT token, and an invalid submitted password case that returns 401.
 
-- [ ] **Step 4: Run the tests to prove the red state**
+- [x] **Step 4: Run the tests to prove the red state**
 
 Run: `cd app && npm test`
 
 Expected: FAIL because `auth-config.ts` does not exist and the existing route accepts development defaults.
 
-- [ ] **Step 5: Implement the pure auth configuration boundary**
+- [x] **Step 5: Implement the pure auth configuration boundary**
 
 Create `auth-config.ts` with these exports and behavior:
 
@@ -150,19 +150,19 @@ export function getAuthConfig(env: NodeJS.ProcessEnv = process.env): AuthConfig 
 
 Define `EMAIL_PATTERN` as `/^[^\s@]+@[^\s@]+\.[^\s@]+$/`; block `admin@example.com`; block `changeme`, `password`, and `password123`; block `mir-default-secret-change-me`, `mir-local-dev-secret`, `mir-docker-secret`, and `change-this-to-a-random-string`.
 
-- [ ] **Step 6: Route all server authentication through the validated config**
+- [x] **Step 6: Route all server authentication through the validated config**
 
 In `server-auth.ts`, remove module-level fallback secrets. Call `getAuthConfig()` inside `generateToken()` and `requireUser()`, then encode the returned secret for `jose`. Update `authErrorResponse()` to map both `AuthConfigurationError` and `AuthError` while returning the configuration error's generic message.
 
 In the login route, call `getAuthConfig()` before comparing credentials and return `authErrorResponse(error)` in the catch block. Preserve 401 for submitted credentials that do not match.
 
-- [ ] **Step 7: Run authentication tests to prove the green state**
+- [x] **Step 7: Run authentication tests to prove the green state**
 
 Run: `cd app && npm test`
 
 Expected: all auth configuration and route tests PASS with zero failures.
 
-- [ ] **Step 8: Write the Compose security validator before changing Compose**
+- [x] **Step 8: Write the Compose security validator before changing Compose**
 
 Create `scripts/validate-compose-security.mjs` with this complete control flow:
 
@@ -220,13 +220,13 @@ try {
 }
 ```
 
-- [ ] **Step 9: Run the Compose validator to prove the red state**
+- [x] **Step 9: Run the Compose validator to prove the red state**
 
 Run: `node scripts/validate-compose-security.mjs`
 
 Expected: FAIL because current Compose supplies defaults, forces development, and publishes PostgreSQL.
 
-- [ ] **Step 10: Make Compose fail closed**
+- [x] **Step 10: Make Compose fail closed**
 
 Change `docker-compose.yml` to:
 
@@ -240,7 +240,7 @@ AUTH_SECRET: ${AUTH_SECRET:?Set AUTH_SECRET in .env}
 
 Remove the app's `NODE_ENV` entry and the database `ports` section. Publish the app as `${MIR_BIND_ADDRESS:-127.0.0.1}:${MIR_PORT:-3000}:3000`.
 
-- [ ] **Step 11: Update first-run and contributor documentation**
+- [x] **Step 11: Update first-run and contributor documentation**
 
 Set `POSTGRES_PASSWORD=`, `AUTH_EMAIL=`, `AUTH_PASSWORD=`, and `AUTH_SECRET=` in `.env.example`. Add `MIR_BIND_ADDRESS=127.0.0.1` and `MIR_PORT=3000`.
 
@@ -252,11 +252,11 @@ In README and CONTRIBUTING:
 - document that `MIR_BIND_ADDRESS=0.0.0.0` intentionally exposes only the application and should be used behind TLS/reverse proxy;
 - state that PostgreSQL is internal to the Compose network.
 
-- [ ] **Step 12: Make Compose validation part of CI**
+- [x] **Step 12: Make Compose validation part of CI**
 
 After `npm ci` in the frontend job, add named steps for `cd app && npm test` and `node scripts/validate-compose-security.mjs`.
 
-- [ ] **Step 13: Run Task 1 verification**
+- [x] **Step 13: Run Task 1 verification**
 
 Run:
 
@@ -269,7 +269,7 @@ docker compose --env-file /tmp/mir-security.env config --format json
 
 Expected: tests PASS; validator prints a success message; resolved app bind is localhost; database has no published ports; no repository auth default appears.
 
-- [ ] **Step 14: Commit Task 1**
+- [x] **Step 14: Commit Task 1**
 
 ```bash
 git add app/src/lib/auth-config.ts app/src/lib/auth-config.test.ts \
@@ -294,19 +294,19 @@ git commit -m "security: make self-hosted auth fail closed"
 - Produces: a lockfile resolving `next@16.2.10`.
 - Produces: a CI gate equivalent to `npm audit --omit=dev --audit-level=high`.
 
-- [ ] **Step 1: Capture the vulnerable audit result**
+- [x] **Step 1: Capture the vulnerable audit result**
 
 Run: `cd app && npm audit --omit=dev --audit-level=high`
 
 Expected before upgrade: exit 1 with one high-severity vulnerability in `next` affecting 16.0.0 through 16.2.5.
 
-- [ ] **Step 2: Upgrade Next.js to the verified stable patch**
+- [x] **Step 2: Upgrade Next.js to the verified stable patch**
 
 Run: `cd app && npm install next@16.2.10`
 
 Expected: `package.json` requires `^16.2.10` and the lockfile resolves `node_modules/next` to 16.2.10.
 
-- [ ] **Step 3: Add the production audit gate and correct documentation**
+- [x] **Step 3: Add the production audit gate and correct documentation**
 
 Add this named CI step after `npm ci` and before build:
 
@@ -317,7 +317,7 @@ Add this named CI step after `npm ci` and before build:
 
 Change the README Tech Stack entry from `Next.js 15` to `Next.js 16` without pinning a patch.
 
-- [ ] **Step 4: Run Task 2 verification**
+- [x] **Step 4: Run Task 2 verification**
 
 Run:
 
@@ -332,7 +332,7 @@ node -p "require('./node_modules/next/package.json').version"
 
 Expected: tests PASS; audit reports zero vulnerabilities at high/critical and exits 0; build succeeds; printed version is `16.2.10`.
 
-- [ ] **Step 5: Commit Task 2**
+- [x] **Step 5: Commit Task 2**
 
 ```bash
 git add app/package.json app/package-lock.json .github/workflows/ci.yml README.md
@@ -349,7 +349,7 @@ git commit -m "security: upgrade Next.js and gate dependency audits"
 **Interfaces:**
 - Produces: a pushed branch and PR closing issues #1 and #2.
 
-- [ ] **Step 1: Run the full local validation matrix**
+- [x] **Step 1: Run the full local validation matrix**
 
 ```bash
 cd app && npm ci && npm test && npm audit --omit=dev --audit-level=high && npm run build
@@ -362,18 +362,18 @@ docker compose --env-file /tmp/mir-security.env build
 
 Expected: every command exits 0; audit has no high/critical findings; build identifies Next.js 16.2.10.
 
-- [ ] **Step 2: Run an isolated Compose smoke test**
+- [x] **Step 2: Run an isolated Compose smoke test**
 
 Use a unique Compose project name and safe temporary environment. Start the stack, wait for the health check, submit one invalid login expecting 401 and one valid login expecting 200 with a token, then run `docker compose down -v` for that unique project.
 
-- [ ] **Step 3: Verify scope and push**
+- [x] **Step 3: Verify scope and push**
 
 Run `git diff --check`, inspect `git status --short`, and compare `git diff origin/main...HEAD` against issues #1 and #2. Push `codex/security-hardening`.
 
-- [ ] **Step 4: Open the pull request**
+- [x] **Step 4: Open the pull request**
 
 The PR body must contain `Closes #1`, `Closes #2`, the no-Notion note, implementation summary, exact validation commands/results, security migration note, and E4 reviewer contract.
 
-- [ ] **Step 5: Run E4 and merge only after the gate closes**
+- [x] **Step 5: Run E4 and merge only after the gate closes**
 
 Review the same final SHA with fresh Codex 5.6 Sol max, Kimi k2.7-code, and GLM 5.2 max using the shared P0-P4 rubric. Resolve every finding explicitly, re-run affected checks and all three reviewers after any code change, require CI green, then merge using the repository's established method.

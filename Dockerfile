@@ -5,7 +5,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # ── Stage 2: Node.js build ──────────────────────────────────────────────
-FROM node:22-alpine AS node-builder
+FROM node:22-bookworm-slim AS node-builder
 WORKDIR /build
 COPY app/package*.json ./
 RUN npm ci

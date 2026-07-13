@@ -30,6 +30,14 @@ test("accepts explicit strong authentication config", () => {
   });
 });
 
+test("normalizes authentication email case", () => {
+  assert.deepEqual(getAuthConfig({ ...VALID_ENV, AUTH_EMAIL: "Owner@Company.COM" }), {
+    email: VALID_ENV.AUTH_EMAIL,
+    password: VALID_ENV.AUTH_PASSWORD,
+    secret: VALID_ENV.AUTH_SECRET,
+  });
+});
+
 test("rejects missing authentication fields even in development", () => {
   expectConfigurationError({ NODE_ENV: "development" }, [
     "AUTH_EMAIL",

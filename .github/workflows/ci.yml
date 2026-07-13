@@ -62,5 +62,34 @@ jobs:
         run: |
           docker run --rm --entrypoint sh market-intelligence-radar-ci -c '
             node -e "if (Number(process.versions.node.split(\".\")[0]) !== 22) process.exit(1)" &&
+            node -e "require(\"next\"); require(\"sharp\")" &&
             python3 -c "import sys, psycopg2, mir.db; assert sys.version_info[:2] == (3, 12)"
           '
+      - name: Smoke test runtime server
+        run: |
+          set -euo pipefail
+          docker rm -f mir-ci-smoke >/dev/null 2>&1 || true
+          docker run -d --name mir-ci-smoke \
+            -e AUTH_EMAIL=owner@company.com \
+            -e AUTH_PASSWORD=correct-horse-battery-staple \
+            -e AUTH_SECRET=0123456789abcdef0123456789abcdef \
+            -e PGHOST=127.0.0.1 \
+            -e PGPORT=5432 \
+            -e PGDATABASE=mir \
+            -e PGUSER=mir \
+            -e PGPASSWORD=ci-postgres-password \
+            -e LLM_API_KEY=test-key \
+            market-intelligence-radar-ci
+          trap 'docker rm -f mir-ci-smoke >/dev/null 2>&1 || true' EXIT
+          ready=false
+          for attempt in {1..30}; do
+            if docker exec mir-ci-smoke wget -q --spider http://127.0.0.1:3000/dashboard; then
+              ready=true
+              break
+            fi
+            sleep 1
+          done
+          if [ "$ready" != true ]; then
+            docker logs mir-ci-smoke || true
+            exit 1
+          fi

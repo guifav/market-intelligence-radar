@@ -25,6 +25,7 @@ export class AuthConfigurationError extends Error {
 
 export function getAuthConfig(env: NodeJS.ProcessEnv = process.env): AuthConfig {
   const email = env.AUTH_EMAIL ?? "";
+  const normalizedEmail = email.toLowerCase();
   const password = env.AUTH_PASSWORD ?? "";
   const secret = env.AUTH_SECRET ?? "";
   const invalid = new Set<string>();
@@ -32,7 +33,7 @@ export function getAuthConfig(env: NodeJS.ProcessEnv = process.env): AuthConfig 
   if (
     email !== email.trim() ||
     !EMAIL_PATTERN.test(email) ||
-    BLOCKED_EMAILS.has(email.toLowerCase())
+    BLOCKED_EMAILS.has(normalizedEmail)
   ) {
     invalid.add("AUTH_EMAIL");
   }
@@ -54,5 +55,5 @@ export function getAuthConfig(env: NodeJS.ProcessEnv = process.env): AuthConfig 
   if (invalid.size > 0) {
     throw new AuthConfigurationError([...invalid]);
   }
-  return { email, password, secret };
+  return { email: normalizedEmail, password, secret };
 }

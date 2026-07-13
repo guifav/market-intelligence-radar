@@ -16,7 +16,7 @@ const safeValues = {
   POSTGRES_PASSWORD: "p@ss$word#%?/-abcdef0123456789",
 };
 const cleanEnv = { ...process.env };
-for (const name of required) delete cleanEnv[name];
+for (const name of [...required, "MIR_BIND_ADDRESS", "MIR_PORT"]) delete cleanEnv[name];
 
 function writeEnvFile(path, values) {
   const lines = [
@@ -122,6 +122,7 @@ try {
 
   const dockerfile = readFileSync(join(root, "Dockerfile"), "utf8");
   assert.match(dockerfile, /^FROM python:3\.12-slim-bookworm AS python-deps$/m);
+  assert.match(dockerfile, /^FROM node:22-bookworm-slim AS node-builder$/m);
   const runnerStageStart = dockerfile.search(/^FROM\s+\S+\s+AS\s+runner\s*$/im);
   assert.notEqual(runnerStageStart, -1, "Dockerfile must define the production runner stage");
   const runnerStage = dockerfile.slice(runnerStageStart);
@@ -154,6 +155,7 @@ try {
   assert.match(dockerignore, /^app\/\.env\.\*$/m);
   assert.match(dockerignore, /^app\/node_modules$/m);
   assert.match(dockerignore, /^app\/\.next$/m);
+  assert.match(dockerignore, /^\.venv\/$/m);
   console.log("Docker Compose security contract OK");
 } finally {
   rmSync(temp, { recursive: true, force: true });

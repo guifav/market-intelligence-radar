@@ -1,4 +1,4 @@
-import { createHash, timingSafeEqual } from "node:crypto";
+import { timingSafeEqual } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthConfig } from "@/lib/auth-config";
 import { authErrorResponse, generateToken } from "@/lib/server-auth";
@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
 
     const email = isRecord(body) ? body.email : undefined;
     const password = isRecord(body) ? body.password : undefined;
-    const emailMatches = constantTimeEqual(email, authEmail);
+    const emailMatches = constantTimeEqual(normalizeEmail(email), authEmail);
     const passwordMatches = constantTimeEqual(password, authPassword);
 
     if (!emailMatches || !passwordMatches) {
@@ -37,9 +37,19 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+function normalizeEmail(value: unknown): unknown {
+  return typeof value === "string" ? value.toLowerCase() : value;
+}
+
 function constantTimeEqual(actual: unknown, expected: string): boolean {
   const actualValue = typeof actual === "string" ? actual : "";
-  const actualDigest = createHash("sha256").update(actualValue, "utf8").digest();
-  const expectedDigest = createHash("sha256").update(expected, "utf8").digest();
-  return timingSafeEqual(actualDigest, expectedDigest);
+  const expectedBuffer = Buffer.from(expected, "utf8");
+  const actualPrefix = actualValue.slice(0, expected.length + 1);
+  const actualValueBuffer = Buffer.from(actualPrefix, "utf8");
+  const actualBuffer = Buffer.alloc(expectedBuffer.length);
+  actualValueBuffer.copy(actualBuffer, 0, 0, expectedBuffer.length);
+  const lengthsMatch =
+    actualPrefix.length === actualValue.length &&
+    actualValueBuffer.length === expectedBuffer.length;
+  return timingSafeEqual(actualBuffer, expectedBuffer) && lengthsMatch;
 }

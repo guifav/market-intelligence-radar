@@ -56,6 +56,19 @@ test("returns a JWT for valid submitted credentials", async () => {
   assert.ok(body.token.length > 0);
 });
 
+test("matches login email case-insensitively", async () => {
+  process.env.AUTH_EMAIL = "Owner@Company.COM";
+  process.env.AUTH_PASSWORD = "correct-horse-battery-staple";
+  process.env.AUTH_SECRET = "0123456789abcdef0123456789abcdef";
+
+  const response = await POST(loginRequest("owner@company.com", "correct-horse-battery-staple"));
+  const body = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.equal(body.email, "owner@company.com");
+  assert.equal(typeof body.token, "string");
+});
+
 test("returns 401 for an invalid submitted password", async () => {
   process.env.AUTH_EMAIL = "owner@company.com";
   process.env.AUTH_PASSWORD = "correct-horse-battery-staple";
@@ -75,6 +88,7 @@ test("returns 401 when either or both submitted credentials are invalid", async 
   for (const [email, password] of [
     ["attacker@company.com", "correct-horse-battery-staple"],
     ["owner@company.com", "invalid-password"],
+    ["owner@company.com", "x".repeat(10_000)],
     ["attacker@company.com", "invalid-password"],
   ]) {
     const response = await POST(loginRequest(email, password));
