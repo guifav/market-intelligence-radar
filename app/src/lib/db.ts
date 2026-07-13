@@ -2,7 +2,9 @@ import { Pool, type PoolConfig } from "pg";
 
 let pool: Pool | null = null;
 
-export function getPoolOptions(env: NodeJS.ProcessEnv = process.env): PoolConfig {
+type EnvLike = Readonly<Record<string, string | undefined>>;
+
+export function getPoolOptions(env: EnvLike = process.env): PoolConfig {
   if (env.DATABASE_URL) {
     return { connectionString: env.DATABASE_URL, max: 10 };
   }

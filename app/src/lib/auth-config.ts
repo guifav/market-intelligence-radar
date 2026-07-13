@@ -9,6 +9,8 @@ const BLOCKED_SECRETS = new Set([
   "replace-with-a-strong-random-secret",
 ]);
 
+type EnvLike = Readonly<Record<string, string | undefined>>;
+
 export interface AuthConfig {
   email: string;
   password: string;
@@ -23,7 +25,7 @@ export class AuthConfigurationError extends Error {
   }
 }
 
-export function getAuthConfig(env: NodeJS.ProcessEnv = process.env): AuthConfig {
+export function getAuthConfig(env: EnvLike = process.env): AuthConfig {
   const email = env.AUTH_EMAIL ?? "";
   const normalizedEmail = email.toLowerCase();
   const password = env.AUTH_PASSWORD ?? "";

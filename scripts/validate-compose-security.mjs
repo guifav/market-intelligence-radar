@@ -11,16 +11,25 @@ const safeEnvFile = join(temp, "safe.env");
 const required = ["AUTH_EMAIL", "AUTH_PASSWORD", "AUTH_SECRET", "POSTGRES_PASSWORD"];
 const safeValues = {
   AUTH_EMAIL: "owner@company.com",
-  AUTH_PASSWORD: "correct$horse#battery%staple?/@2026",
+  AUTH_PASSWORD: "correct$horse#battery%staple?/@o'clock2026",
   AUTH_SECRET: "0123456789abcdef0123456789abcdef",
-  POSTGRES_PASSWORD: "p@ss$word#%?/-abcdef0123456789",
+  POSTGRES_PASSWORD: "p@ss$word#%?/-o'clock-abcdef0123456789",
 };
 const cleanEnv = { ...process.env };
 for (const name of [...required, "MIR_BIND_ADDRESS", "MIR_PORT"]) delete cleanEnv[name];
 
+function envValue(value) {
+  if (!value.includes("'")) return `'${value}'`;
+  return `"${value
+    .replaceAll("\\", "\\\\")
+    .replaceAll("$", "\\$")
+    .replaceAll('"', '\\"')
+    .replaceAll("\n", "\\n")}"`;
+}
+
 function writeEnvFile(path, values) {
   const lines = [
-    ...Object.entries(values).map(([name, value]) => `${name}='${value.replaceAll("'", "\\'")}'`),
+    ...Object.entries(values).map(([name, value]) => `${name}=${envValue(value)}`),
     "LLM_API_KEY='test-key'",
   ];
   writeFileSync(

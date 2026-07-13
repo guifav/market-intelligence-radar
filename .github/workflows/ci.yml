@@ -53,6 +53,8 @@ jobs:
         run: cd app && npm audit --omit=dev --audit-level=high
       - name: Run authentication tests
         run: cd app && npm test
+      - name: Type-check frontend
+        run: cd app && npm run typecheck
       - name: Validate Compose security
         run: node scripts/validate-compose-security.mjs
       - run: cd app && npm run build

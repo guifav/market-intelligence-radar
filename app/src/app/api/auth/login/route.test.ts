@@ -32,7 +32,7 @@ function restoreEnvironment() {
 afterEach(restoreEnvironment);
 
 test("returns 503 for repository defaults even in development", async () => {
-  process.env.NODE_ENV = "development";
+  Object.assign(process.env, { NODE_ENV: "development" });
   process.env.AUTH_EMAIL = "admin@example.com";
   process.env.AUTH_PASSWORD = "changeme";
   process.env.AUTH_SECRET = "mir-local-dev-secret";

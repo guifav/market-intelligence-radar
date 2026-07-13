@@ -374,6 +374,6 @@ Run `git diff --check`, inspect `git status --short`, and compare `git diff orig
 
 The PR body must contain `Closes #1`, `Closes #2`, the no-Notion note, implementation summary, exact validation commands/results, security migration note, and E4 reviewer contract.
 
-- [x] **Step 5: Run E4 and merge only after the gate closes**
+- [ ] **Step 5: Run E4 and merge only after the gate closes**
 
-Review the same final SHA with fresh Codex 5.6 Sol max, Kimi k2.7-code, and GLM 5.2 max using the shared P0-P4 rubric. Resolve every finding explicitly, re-run affected checks and all three reviewers after any code change, require CI green, then merge using the repository's established method.
+Review the same final SHA with fresh Codex 5.6 Sol max, Kimi k2.7-code, and GLM 5.2 max using the shared P0-P4 rubric. Resolve every finding explicitly, re-run affected checks and all three reviewers after any code change, require CI green, then merge using the repository's established method. This final gate is tracked on the PR after the reviewed SHA is fixed, so this committed plan intentionally remains unchecked.

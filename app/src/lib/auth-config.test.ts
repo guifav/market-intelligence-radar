@@ -9,7 +9,7 @@ const VALID_ENV = {
   AUTH_SECRET: "0123456789abcdef0123456789abcdef",
 };
 
-function expectConfigurationError(env: NodeJS.ProcessEnv, fields: string[]) {
+function expectConfigurationError(env: Readonly<Record<string, string | undefined>>, fields: string[]) {
   assert.throws(
     () => getAuthConfig(env),
     (error: unknown) => {
