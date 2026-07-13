@@ -1,4 +1,6 @@
 .env
+app/.env.local
+.superpowers/
 __pycache__/
 *.pyc
 venv/

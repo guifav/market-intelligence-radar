@@ -1,11 +1,12 @@
 """PostgreSQL connection pool and schema bootstrap for MIR."""
 
 import logging
-import os
 from pathlib import Path
 
 import psycopg2
 from psycopg2 import pool, extras
+
+from mir import config
 
 log = logging.getLogger("mir.db")
 
@@ -16,8 +17,11 @@ def get_pool() -> pool.ThreadedConnectionPool:
     """Get or create the connection pool (thread-safe, singleton)."""
     global _pool
     if _pool is None or _pool.closed:
-        dsn = os.getenv("DATABASE_URL", "postgresql://mir:mir@localhost:5432/mir")
-        _pool = pool.ThreadedConnectionPool(minconn=1, maxconn=10, dsn=dsn)
+        database_url = config.DATABASE_URL
+        connection_args = {"dsn": database_url} if database_url else {}
+        _pool = pool.ThreadedConnectionPool(
+            minconn=1, maxconn=10, **connection_args
+        )
         log.info("PostgreSQL connection pool created")
     return _pool
 

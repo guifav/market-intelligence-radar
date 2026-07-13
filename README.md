@@ -23,34 +23,105 @@ An AI-powered market intelligence platform that automatically scans news sources
 git clone https://github.com/guifav/market-intelligence-radar.git
 cd market-intelligence-radar
 
-# 2. Set your LLM API key
+# 2. Configure required values
 cp .env.example .env
-# Edit .env — at minimum set LLM_API_KEY
+# Edit .env — set LLM_API_KEY, POSTGRES_PASSWORD, AUTH_EMAIL, AUTH_PASSWORD, and AUTH_SECRET
+# POSTGRES_PASSWORD=$(openssl rand -hex 24)
+# AUTH_SECRET=$(openssl rand -hex 32)
+# Single-quote values containing $, #, or other punctuation.
 
 # 3. Start with Docker Compose
 docker compose up -d
 
 # 4. Open the dashboard
 open http://localhost:3000
-# Login: admin@example.com / changeme
+# Login: use AUTH_EMAIL / AUTH_PASSWORD from .env
 ```
 
 ## Configuration
 
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `DATABASE_URL` | Yes | `postgresql://mir:mir@localhost:5432/mir` | PostgreSQL connection string |
+| `DATABASE_URL` | Manual setup | — | PostgreSQL connection string used outside Docker Compose; URL-encode reserved characters in credentials |
+| `POSTGRES_PASSWORD` | Docker Compose | — | PostgreSQL password; generated hex is simplest, while punctuation requires single-quoted `.env` syntax |
 | `LLM_PROVIDER` | Yes | `anthropic` | LLM provider: `anthropic`, `openai`, or `gemini` |
 | `LLM_API_KEY` | Yes | — | API key for your LLM provider |
 | `LLM_MODEL` | No | Auto | Override the default model per provider |
-| `AUTH_EMAIL` | No | `admin@example.com` | Login email for the dashboard |
-| `AUTH_PASSWORD` | No | `changeme` | Login password |
-| `AUTH_SECRET` | No | — | JWT signing secret (change in production!) |
+| `AUTH_EMAIL` | Yes | — | Login email for the dashboard |
+| `AUTH_PASSWORD` | Yes | — | Login password (minimum 12 characters; no default values) |
+| `AUTH_SECRET` | Yes | — | JWT signing secret; generate with `openssl rand -hex 32` |
+| `MIR_BIND_ADDRESS` | No | `127.0.0.1` | Application bind address for Docker Compose |
+| `MIR_PORT` | No | `3000` | Application host port for Docker Compose |
 | `FIRECRAWL_API_KEY` | No | — | Firecrawl API key for premium scraping |
 | `APOLLO_API_KEY` | No | — | Apollo.io key for contact enrichment |
 | `SALESQL_API_KEY` | No | — | SalesQL key for enrichment fallback |
 
-> **Security note:** The default `AUTH_EMAIL`, `AUTH_PASSWORD`, and `AUTH_SECRET` values are for **local development only**. If you deploy this to a server, change all three in your `.env` file. The `docker-compose.yml` defaults are intentionally insecure to make local setup frictionless.
+> **Security note:** Docker Compose will not start until `POSTGRES_PASSWORD`, `AUTH_EMAIL`, `AUTH_PASSWORD`, and `AUTH_SECRET` are set. Generated hex values are the simplest `.env` representation. Strong values containing `$`, `#`, `%`, `?`, `/`, `@`, or other punctuation must be enclosed in single quotes in `.env` so Compose preserves them literally. PostgreSQL credentials are passed as discrete `PG*` variables, so the parsed password does not require URL encoding. PostgreSQL is internal to the Compose network and is not published to the host. `MIR_BIND_ADDRESS=0.0.0.0` intentionally exposes only the application; use it only behind a TLS-terminating reverse proxy.
+
+## Upgrading Existing Docker Compose Data
+
+Fresh installs do not need a password migration: set strong values for `POSTGRES_PASSWORD`,
+`AUTH_EMAIL`, `AUTH_PASSWORD`, and `AUTH_SECRET` in `.env`, then run
+`docker compose up -d`.
+
+Existing installations created with the earlier default Docker Compose configuration need an
+explicit database password rotation. The `POSTGRES_PASSWORD` variable initializes PostgreSQL
+only when the `pgdata` volume is first created; changing it later does not change the password
+stored for the existing `mir` role.
+
+1. Before replacing the current Compose configuration or changing the database password, back
+   up the running database. If it is stopped, start it with the currently deployed configuration
+   first.
+
+   ```bash
+   umask 077
+   docker compose exec -T db pg_dump -U mir -d mir -Fc > mir-before-password-rotation.dump
+   ```
+
+2. Update the checkout, then configure strong new application credentials in `.env`. Temporarily
+   keep the old database password so the existing volume remains reachable:
+
+   ```dotenv
+   AUTH_EMAIL=owner@company.com
+   AUTH_PASSWORD=<a-strong-password-of-at-least-12-characters>
+   AUTH_SECRET=<output-of-openssl-rand-hex-32>
+   POSTGRES_PASSWORD=mir
+   ```
+
+3. Start only PostgreSQL:
+
+   ```bash
+   docker compose up -d db
+   ```
+
+4. Rotate the database password interactively so the new value is not written to shell history.
+   Use a strong value from a password manager or the output of `openssl rand -hex 24` when
+   prompted. Docker Compose passes this value through discrete `PG*` variables, so it does not
+   require URL encoding. In `.env`, enclose values containing punctuation in single quotes so
+   Compose preserves them literally:
+
+   ```bash
+   docker compose exec db psql -U mir -d mir
+   ```
+
+   At the `psql` prompt:
+
+   ```text
+   \password mir
+   \q
+   ```
+
+5. Replace the temporary `POSTGRES_PASSWORD=mir` in `.env` with the exact password entered at
+   the prompt, then start the full stack:
+
+   ```bash
+   docker compose up -d
+   ```
+
+Do not delete the `pgdata` volume and do not run `docker compose down -v` during this upgrade;
+either action deletes the existing database data. External or custom PostgreSQL installations
+must rotate credentials through their database provider instead of following the built-in
+Compose role procedure.
 
 ## Architecture
 
@@ -125,20 +196,32 @@ The extraction prompt adapts automatically to your taxonomy.
 ## Development
 
 ```bash
-# Backend
+# Configure the backend and dashboard
+cp .env.example .env
+# Set AUTH_EMAIL, AUTH_PASSWORD (12+ characters), AUTH_SECRET, and LLM_API_KEY.
+# For manual PostgreSQL, also replace DATABASE_URL with your connection string.
+# URL-encode reserved characters used in DATABASE_URL credentials.
+# Single-quote .env values containing $, #, or other punctuation.
+
+# Backend (PostgreSQL must already be running and reachable via DATABASE_URL)
 pip install -r requirements.txt
 python3 -m mir.scanner --setup
 
-# Frontend
+# Frontend (copy the ignored root environment file for Next.js local development)
 cd app
+cp ../.env .env.local
 npm install
 npm run dev
 ```
 
+Use `docker compose up -d` instead when you do not manage PostgreSQL manually. Compose ignores
+`DATABASE_URL` and connects through discrete `PGHOST`, `PGPORT`, `PGDATABASE`, `PGUSER`, and
+`PGPASSWORD` values derived from its service configuration.
+
 ## Tech Stack
 
 - **Backend:** Python 3.12, psycopg2, requests
-- **Frontend:** Next.js 15, React 19, Tailwind CSS 4, shadcn/ui
+- **Frontend:** Next.js 16, React 19, Tailwind CSS 4, shadcn/ui
 - **Database:** PostgreSQL 16
 - **LLM:** Anthropic Claude / OpenAI GPT-4o / Google Gemini
 - **Scraping:** Firecrawl (premium) + requests+BeautifulSoup (fallback)

@@ -1,0 +1,14 @@
+.git
+.gitignore
+.superpowers
+.env
+.env.*
+app/.env
+app/.env.*
+app/node_modules
+app/.next
+__pycache__
+*.pyc
+*.log
+.DS_Store
+.venv/

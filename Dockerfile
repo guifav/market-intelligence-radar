@@ -1,11 +1,11 @@
 # ── Stage 1: Python dependencies ─────────────────────────────────────────
-FROM python:3.12-slim AS python-deps
+FROM python:3.12-slim-bookworm AS python-deps
 WORKDIR /deps
 COPY requirements.txt .
-RUN pip install --no-cache-dir --target=/deps/site-packages -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # ── Stage 2: Node.js build ──────────────────────────────────────────────
-FROM node:22-alpine AS node-builder
+FROM node:22-bookworm-slim AS node-builder
 WORKDIR /build
 COPY app/package*.json ./
 RUN npm ci
@@ -13,22 +13,24 @@ COPY app/ ./
 RUN npm run build
 
 # ── Stage 3: Runtime ────────────────────────────────────────────────────
-FROM node:22-slim AS runner
+FROM node:22-bookworm-slim AS runner
 WORKDIR /app
 
-# Install Python + wget (for healthcheck — node:22-slim lacks curl)
-RUN apt-get update && apt-get install -y --no-install-recommends python3 python3-pip wget && \
+# Install wget for the healthcheck; Python comes from the official 3.12 stage.
+RUN apt-get update && apt-get install -y --no-install-recommends wget && \
     rm -rf /var/lib/apt/lists/*
 
 ENV NODE_ENV=production
-ENV PYTHONPATH=/app/python-deps
+ENV PYTHONPATH=/app
 ENV MIR_DATA_DIR=/app/data
 
-# Copy Python deps and source
-COPY --from=python-deps /deps/site-packages /app/python-deps
+# Copy the matching Python 3.12 runtime, installed packages, and source.
+COPY --from=python-deps /usr/local /usr/local
+RUN python3 --version | grep -E '^Python 3\.12\.'
 COPY mir/ /app/mir/
 COPY schema.sql /app/schema.sql
 COPY requirements.txt /app/requirements.txt
+RUN python3 -c "import psycopg2; import mir.db"
 
 # Copy Next.js build
 COPY --from=node-builder /build/.next/standalone ./
