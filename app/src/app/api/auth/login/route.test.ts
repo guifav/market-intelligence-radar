@@ -14,6 +14,14 @@ function loginRequest(email: string, password: string) {
   });
 }
 
+function rawLoginRequest(contentType: string, body: string) {
+  return new NextRequest("http://localhost/api/auth/login", {
+    method: "POST",
+    headers: { "content-type": contentType },
+    body,
+  });
+}
+
 function restoreEnvironment() {
   for (const key of Object.keys(process.env)) {
     if (!(key in originalEnv)) delete process.env[key];
@@ -57,4 +65,35 @@ test("returns 401 for an invalid submitted password", async () => {
 
   assert.equal(response.status, 401);
   assert.deepEqual(await response.json(), { error: "Invalid credentials" });
+});
+
+test("returns 401 when either or both submitted credentials are invalid", async () => {
+  process.env.AUTH_EMAIL = "owner@company.com";
+  process.env.AUTH_PASSWORD = "correct-horse-battery-staple";
+  process.env.AUTH_SECRET = "0123456789abcdef0123456789abcdef";
+
+  for (const [email, password] of [
+    ["attacker@company.com", "correct-horse-battery-staple"],
+    ["owner@company.com", "invalid-password"],
+    ["attacker@company.com", "invalid-password"],
+  ]) {
+    const response = await POST(loginRequest(email, password));
+    assert.equal(response.status, 401);
+    assert.deepEqual(await response.json(), { error: "Invalid credentials" });
+  }
+});
+
+test("returns 400 for malformed JSON or non-JSON request bodies", async () => {
+  process.env.AUTH_EMAIL = "owner@company.com";
+  process.env.AUTH_PASSWORD = "correct-horse-battery-staple";
+  process.env.AUTH_SECRET = "0123456789abcdef0123456789abcdef";
+
+  for (const request of [
+    rawLoginRequest("application/json", "{"),
+    rawLoginRequest("text/plain", "owner@company.com"),
+  ]) {
+    const response = await POST(request);
+    assert.equal(response.status, 400);
+    assert.deepEqual(await response.json(), { error: "Invalid request" });
+  }
 });

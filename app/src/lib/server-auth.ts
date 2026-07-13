@@ -41,8 +41,6 @@ export async function requireUser(req: NextRequest): Promise<MirUser> {
   }
 }
 
-// Backward compat aliases
-
 export function authErrorResponse(err: unknown): NextResponse {
   if (err instanceof AuthConfigurationError || err instanceof AuthError) {
     return NextResponse.json({ error: err.message }, { status: err.status });

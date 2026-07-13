@@ -6,6 +6,7 @@ const BLOCKED_SECRETS = new Set([
   "mir-local-dev-secret",
   "mir-docker-secret",
   "change-this-to-a-random-string",
+  "replace-with-a-strong-random-secret",
 ]);
 
 export interface AuthConfig {
@@ -23,20 +24,29 @@ export class AuthConfigurationError extends Error {
 }
 
 export function getAuthConfig(env: NodeJS.ProcessEnv = process.env): AuthConfig {
-  const email = env.AUTH_EMAIL?.trim() ?? "";
+  const email = env.AUTH_EMAIL ?? "";
   const password = env.AUTH_PASSWORD ?? "";
   const secret = env.AUTH_SECRET ?? "";
   const invalid = new Set<string>();
 
-  if (!EMAIL_PATTERN.test(email) || BLOCKED_EMAILS.has(email.toLowerCase())) {
+  if (
+    email !== email.trim() ||
+    !EMAIL_PATTERN.test(email) ||
+    BLOCKED_EMAILS.has(email.toLowerCase())
+  ) {
     invalid.add("AUTH_EMAIL");
   }
-  if (password.length < 12 || BLOCKED_PASSWORDS.has(password.toLowerCase())) {
+  if (
+    password !== password.trim() ||
+    password.length < 12 ||
+    BLOCKED_PASSWORDS.has(password.toLowerCase())
+  ) {
     invalid.add("AUTH_PASSWORD");
   }
   if (
+    secret !== secret.trim() ||
     secret.length < 32 ||
-    BLOCKED_SECRETS.has(secret) ||
+    BLOCKED_SECRETS.has(secret.toLowerCase()) ||
     (secret.length > 0 && new Set(secret).size === 1)
   ) {
     invalid.add("AUTH_SECRET");

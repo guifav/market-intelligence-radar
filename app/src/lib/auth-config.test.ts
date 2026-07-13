@@ -46,6 +46,17 @@ test("rejects blocked authentication email and passwords", () => {
   expectConfigurationError({ ...VALID_ENV, AUTH_PASSWORD: "short-pass" }, ["AUTH_PASSWORD"]);
 });
 
+test("rejects leading or trailing whitespace in every authentication field", () => {
+  expectConfigurationError({ ...VALID_ENV, AUTH_EMAIL: ` ${VALID_ENV.AUTH_EMAIL}` }, ["AUTH_EMAIL"]);
+  expectConfigurationError({ ...VALID_ENV, AUTH_EMAIL: `${VALID_ENV.AUTH_EMAIL} ` }, ["AUTH_EMAIL"]);
+  expectConfigurationError({ ...VALID_ENV, AUTH_PASSWORD: ` ${VALID_ENV.AUTH_PASSWORD}` }, ["AUTH_PASSWORD"]);
+  expectConfigurationError({ ...VALID_ENV, AUTH_PASSWORD: `${VALID_ENV.AUTH_PASSWORD} ` }, ["AUTH_PASSWORD"]);
+  expectConfigurationError({ ...VALID_ENV, AUTH_SECRET: ` ${VALID_ENV.AUTH_SECRET}` }, ["AUTH_SECRET"]);
+  expectConfigurationError({ ...VALID_ENV, AUTH_SECRET: `${VALID_ENV.AUTH_SECRET} ` }, ["AUTH_SECRET"]);
+  expectConfigurationError({ ...VALID_ENV, AUTH_PASSWORD: "changeme    " }, ["AUTH_PASSWORD"]);
+  expectConfigurationError({ ...VALID_ENV, AUTH_SECRET: "mir-default-secret-change-me    " }, ["AUTH_SECRET"]);
+});
+
 test("rejects blocked, short, and repeated authentication secrets", () => {
   for (const secret of [
     "mir-default-secret-change-me",
@@ -57,4 +68,14 @@ test("rejects blocked, short, and repeated authentication secrets", () => {
   ]) {
     expectConfigurationError({ ...VALID_ENV, AUTH_SECRET: secret }, ["AUTH_SECRET"]);
   }
+});
+
+test("rejects known authentication values case-insensitively", () => {
+  expectConfigurationError({ ...VALID_ENV, AUTH_EMAIL: "ADMIN@EXAMPLE.COM" }, ["AUTH_EMAIL"]);
+  expectConfigurationError({ ...VALID_ENV, AUTH_PASSWORD: "PASSWORD123" }, ["AUTH_PASSWORD"]);
+  expectConfigurationError({ ...VALID_ENV, AUTH_SECRET: "MIR-LOCAL-DEV-SECRET" }, ["AUTH_SECRET"]);
+  expectConfigurationError(
+    { ...VALID_ENV, AUTH_SECRET: "REPLACE-WITH-A-STRONG-RANDOM-SECRET" },
+    ["AUTH_SECRET"],
+  );
 });

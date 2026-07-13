@@ -20,7 +20,11 @@ services:
       db:
         condition: service_healthy
     environment:
-      DATABASE_URL: postgresql://mir:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@db:5432/mir
+      PGHOST: db
+      PGPORT: "5432"
+      PGDATABASE: mir
+      PGUSER: mir
+      PGPASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
       LLM_PROVIDER: ${LLM_PROVIDER:-anthropic}
       LLM_API_KEY: ${LLM_API_KEY}
       AUTH_EMAIL: ${AUTH_EMAIL:?Set AUTH_EMAIL in .env}

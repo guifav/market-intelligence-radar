@@ -15,6 +15,8 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -r requirements.txt
+      - name: Run Python unit tests
+        run: python3 -m unittest discover -s tests -p 'test_*.py'
       - name: Compile check
         run: python3 -m compileall -q mir
       - name: Smoke import all modules
@@ -54,3 +56,11 @@ jobs:
       - name: Validate Compose security
         run: node scripts/validate-compose-security.mjs
       - run: cd app && npm run build
+      - name: Build runtime image
+        run: docker build --tag market-intelligence-radar-ci .
+      - name: Verify runtime image
+        run: |
+          docker run --rm --entrypoint sh market-intelligence-radar-ci -c '
+            node -e "if (Number(process.versions.node.split(\".\")[0]) !== 22) process.exit(1)" &&
+            python3 -c "import sys, psycopg2, mir.db; assert sys.version_info[:2] == (3, 12)"
+          '

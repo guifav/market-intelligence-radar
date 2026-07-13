@@ -7,7 +7,7 @@ Thanks for your interest in contributing! Here's how to get started.
 ### Prerequisites
 
 - Python 3.12+
-- Node.js 20+
+- Node.js 22+
 - PostgreSQL 16+
 - Docker & Docker Compose (optional, for easy setup)
 
@@ -30,11 +30,14 @@ docker compose up -d
 # Login with AUTH_EMAIL / AUTH_PASSWORD from .env
 
 # Option B: Manual setup
-# Backend
+# Set DATABASE_URL in .env to your manually managed PostgreSQL instance.
+# URL-encode reserved characters used in DATABASE_URL credentials.
+# Backend (mir.config loads the root .env file)
 pip install -r requirements.txt
 python3 -m mir.scanner --setup
 
-# Frontend
+# Frontend (Next.js loads its ignored app/.env.local copy)
+cp .env app/.env.local
 cd app
 npm install
 npm run dev
@@ -44,7 +47,9 @@ Docker Compose requires all four security values before it starts: `POSTGRES_PAS
 `AUTH_EMAIL`, `AUTH_PASSWORD`, and `AUTH_SECRET`. PostgreSQL is internal to the Compose
 network and is not published to the host. The application binds to `127.0.0.1` by default;
 set `MIR_BIND_ADDRESS=0.0.0.0` only when the application is intentionally exposed behind a
-TLS-terminating reverse proxy.
+TLS-terminating reverse proxy. Hex-generated credentials are the simplest `.env` format. Wrap
+values containing `$`, `#`, or other punctuation in single quotes so Compose preserves them
+literally.
 
 ## Upgrading Existing Docker Compose Data
 
@@ -57,6 +62,7 @@ data.
 
 ```bash
 # Python — compile check
+python3 -m unittest discover -s tests -p 'test_*.py'
 python3 -m compileall -q mir
 
 # TypeScript — type check + build
