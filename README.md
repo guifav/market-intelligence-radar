@@ -4,6 +4,8 @@
 
 An AI-powered market intelligence platform that automatically scans news sources, extracts structured intelligence (people, companies, deals, signals), and presents it in a real-time dashboard.
 
+**Article (in Portuguese):** [Como construí um radar de inteligência de mercado, e por que tornei o código opensource](https://guifav.dev/blog/radar-inteligencia-mercado-open-source/)
+
 ## What It Does
 
 ![What it does — 7 steps from scan to dashboard](docs/what-it-does.svg)
